@@ -1,5 +1,4 @@
 import { Link, useLocation } from 'react-router-dom';
-import { FaChevronRight } from 'react-icons/fa';
 
 export default function Submenu({ activeMenu, menuItems, setSidebarOpen }) {
   const location = useLocation();
@@ -12,11 +11,12 @@ export default function Submenu({ activeMenu, menuItems, setSidebarOpen }) {
     <div
       className={`
         fixed inset-y-0 left-16 bg-blue-600 text-white w-48
-        transform translate-x-0
+        transform ${activeMenu ? 'translate-x-0' : '-translate-x-full'}
         transition-transform duration-300 ease-in-out
-        md:static md:flex-shrink-0
-        z-30
+        md:static md:flex-shrink-0 z-30
       `}
+      onMouseEnter={() => {}}
+      onMouseLeave={() => setSidebarOpen(false)}
     >
       {currentMenu.submenu.map(({ label, path }) => (
         <Link

@@ -3,9 +3,9 @@ import { auth } from '../firebase';
 
 export default function Navbar({ sair, setSidebarOpen }) {
   return (
-    <header className="flex items-center justify-between bg-white shadow-md px-6 h-16">
+    <header className="flex items-center justify-between bg-white shadow-md px-6 h-16" >
       <button
-        className="text-blue-700 md:hidden focus:outline-none"
+        className="text-blue-700 md:hidden focus:outline-none" 
         onClick={() => setSidebarOpen(true)}
         aria-label="Abrir menu"
       >
