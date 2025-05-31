@@ -1,41 +1,38 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
-import Login from './pages/Login';
-import Register from './pages/Register';
-import Home from './pages/Home'; // layout fixo com Sidebar + Navbar + Outlet
-import PrivateRoute from './components/PrivateRoute';
-import { Estatisticas } from './pages/Estatisticas';
-import { Perfil } from './pages/Perfil';
-import { EditarPerfil } from './pages/EditarPerfil';
-import { Horarios } from './pages/Horarios';
-import { HorarioManualmente } from './pages/HorarioManualmente';
+import React, { useState } from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Navbar from './components/Navbar';
+import Home from './pages/Home';
+import Perfil from './pages/Perfil';
+import Configuracoes from './pages/Configuracoes';
+import Estudos from './pages/Estudos';
+import EstudosEmCasa from './pages/EstudosEmCasa';
+import IFMS from './pages/IFMS';
+import Biblioteca from './pages/Biblioteca';
 
-export default function App() {
+function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
   return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-
-      {/* Layout fixo sem /home na URL */}
-      <Route
-        path="/"
-        element={
-          <PrivateRoute>
-            <Home />
-          </PrivateRoute>
-        }
-      >
-        {/* Página inicial no "/" */}
-        <Route index element={<div>Página inicial dentro do Home</div>} />
-        <Route path="home/estatisticas" element={<Estatisticas />} />
-        <Route path="perfil/meu-perfil" element={<Perfil />} />
-        <Route path="perfil/editar" element={<EditarPerfil />} />
-        <Route path="escola/horarios" element={<Horarios />} />
-        <Route path="horarios/manual" element={<HorarioManualmente />} />
-        {/* outras rotas fixas aqui */}
-      </Route>
-
-      {/* Redireciona qualquer outra rota não encontrada para "/" */}
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <div className="h-screen bg-gray-900 text-white overflow-hidden">
+      <Sidebar isOpen={menuOpen} setIsOpen={setMenuOpen} />
+      
+      <div className="md:ml-64 flex flex-col h-full">
+        <Navbar toggleMenu={() => setMenuOpen(!menuOpen)} />
+        <main className="p-4 overflow-y-auto flex-1">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/configuracoes" element={<Configuracoes />} />
+            <Route path="/estudos" element={<Estudos />} />
+            <Route path="/estudos-em-casa" element={<EstudosEmCasa />} />
+            <Route path="/ifms" element={<IFMS />} />
+            <Route path="/biblioteca-livros" element={<Biblioteca />} />
+          </Routes>
+        </main>
+      </div>
+    </div>
   );
 }
+
+export default App;
