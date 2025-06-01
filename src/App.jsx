@@ -10,7 +10,12 @@ import EstudosEmCasa from './pages/EstudosEmCasa';
 import IFMS from './pages/IFMS';
 import Biblioteca from './pages/Biblioteca';
 import Diario from './pages/Diario';
-
+import Agenda from './pages/Agenda';
+import Pomodoro from './pages/Pomodoro';
+import BemEstar from './pages/BemEstar';
+import Progresso from './pages/Progresso';
+import Medalhas from './pages/Medalhas';
+import Projetos from './pages/Projetos';
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -30,6 +35,12 @@ function App() {
             <Route path="/ifms" element={<IFMS />} />
             <Route path="/biblioteca-livros" element={<Biblioteca />} />
             <Route path="/diario" element={<Diario />} />
+            <Route path="/agenda" element={<Agenda />} />
+            <Route path="/pomodoro" element={<Pomodoro />} />
+            <Route path="/bem-estar" element={<BemEstar />} />
+            <Route path="/progresso" element={<Progresso />} />
+            <Route path="/medalhas" element={<Medalhas />} />
+            <Route path="/projetos" element={<Projetos />} />
           </Routes>
         </main>
       </div>

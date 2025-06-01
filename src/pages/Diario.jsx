@@ -3,6 +3,7 @@ import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   LineChart, Line, XAxis, YAxis, CartesianGrid
 } from 'recharts';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const tarefas = [
   { hora: '05:00', atividade: 'Acordar e higiene pessoal' },
@@ -18,6 +19,48 @@ const cores = ['#4caf50', '#f44336'];
 const getHoje = () => {
   const hoje = new Date();
   return hoje.toISOString().split('T')[0];
+};
+
+const fadeSlideUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+};
+
+const zoomIn = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } },
+};
+
+const listVariants = {
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+  hidden: {},
+};
+
+const itemVariants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: { opacity: 1, y: 0 },
+};
+
+const checkboxTap = {
+  scale: 1.2,
+  transition: { type: 'spring', stiffness: 300, damping: 10 },
+};
+
+const cardHover = {
+  scale: 1.03,
+  boxShadow: '0px 10px 20px rgba(0,0,0,0.12)',
+};
+
+const lineAnimation = {
+  hidden: { pathLength: 0 },
+  visible: {
+    pathLength: 1,
+    transition: { duration: 2, ease: 'easeInOut' },
+  },
 };
 
 const Diario = () => {
@@ -69,79 +112,125 @@ const Diario = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 font-sans text-gray-800 dark:text-gray-100 dark:bg-gray-900 min-h-screen">
-  <h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
-    📅 Rotina Diária - {dataAtual}
-  </h2>
 
-  <ul className="space-y-4 mb-10">
-    {tarefas.map((item, index) => (
-      <li key={index} className="flex items-center space-x-4">
-        <input
-          type="checkbox"
-          checked={!!concluidasHoje[index]}
-          onChange={() => toggleTarefa(index)}
-          className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
-        />
-        <label className="cursor-pointer">
-          <strong>{item.hora}</strong> -{' '}
-          <span
-            className={
-              concluidasHoje[index]
-                ? 'line-through text-gray-500 dark:text-gray-400'
-                : ''
-            }
+      <motion.h2
+        className="text-2xl md:text-3xl font-bold mb-6 text-center"
+        variants={fadeSlideUp}
+        initial="hidden"
+        animate="visible"
+      >
+        📅 Rotina Diária - {dataAtual}
+      </motion.h2>
+
+      <motion.ul
+        className="space-y-4 mb-10"
+        variants={listVariants}
+        initial="hidden"
+        animate="visible"
+      >
+        {tarefas.map((item, index) => (
+          <motion.li
+            key={index}
+            className="flex items-center space-x-4"
+            variants={itemVariants}
+            whileHover={{ scale: 1.03 }}
           >
-            {item.atividade}
-          </span>
-        </label>
-      </li>
-    ))}
-  </ul>
+            <motion.input
+              type="checkbox"
+              checked={!!concluidasHoje[index]}
+              onChange={() => toggleTarefa(index)}
+              className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
+              whileTap={checkboxTap}
+              layout
+            />
+            <label className="cursor-pointer">
+              <strong>{item.hora}</strong> -{' '}
+              <span
+                className={
+                  concluidasHoje[index]
+                    ? 'line-through text-gray-500 dark:text-gray-400'
+                    : ''
+                }
+              >
+                {item.atividade}
+              </span>
+            </label>
+          </motion.li>
+        ))}
+      </motion.ul>
 
-  <div className="grid md:grid-cols-2 gap-8">
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
-      <h3 className="text-lg font-semibold mb-2">📊 Progresso de Hoje</h3>
-      <div className="w-full h-64">
-        <ResponsiveContainer>
-          <PieChart>
-            <Pie
-              data={dadosPizza}
-              dataKey="valor"
-              nameKey="nome"
-              cx="50%"
-              cy="50%"
-              outerRadius={80}
-              label
-            >
-              {dadosPizza.map((entry, index) => (
-                <Cell key={`cell-${index}`} fill={cores[index]} />
-              ))}
-            </Pie>
-            <Tooltip />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+      <div className="grid md:grid-cols-2 gap-8">
+
+        <motion.div
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4"
+          variants={zoomIn}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.4 }}
+          whileHover={cardHover}
+        >
+          <h3 className="text-lg font-semibold mb-2">📊 Progresso de Hoje</h3>
+          <div className="w-full h-64">
+            <ResponsiveContainer>
+              <PieChart>
+                <Pie
+                  data={dadosPizza}
+                  dataKey="valor"
+                  nameKey="nome"
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  label
+                  isAnimationActive={true}
+                  animationDuration={800}
+                >
+                  {dadosPizza.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={cores[index]} />
+                  ))}
+                </Pie>
+                <Tooltip />
+                <Legend />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
+        <motion.div
+          className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4"
+          variants={zoomIn}
+          initial="hidden"
+          animate="visible"
+          transition={{ delay: 0.6 }}
+          whileHover={cardHover}
+        >
+          <h3 className="text-lg font-semibold mb-2">📈 Histórico dos Últimos Dias</h3>
+          <div className="w-full h-64">
+            <ResponsiveContainer>
+              <LineChart data={dadosLinha}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="data" />
+                <YAxis domain={[0, tarefas.length]} allowDecimals={false} />
+                <Tooltip />
+                <Legend />
+                <motion.path
+                  d=""
+                  initial="hidden"
+                  animate="visible"
+                  variants={lineAnimation}
+                />
+                <Line
+                  type="monotone"
+                  dataKey="feitas"
+                  stroke="#4caf50"
+                  isAnimationActive={false} // vamos controlar pela motion.path
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </motion.div>
+
       </div>
     </div>
-
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4">
-      <h3 className="text-lg font-semibold mb-2">📈 Histórico dos Últimos Dias</h3>
-      <div className="w-full h-64">
-        <ResponsiveContainer>
-          <LineChart data={dadosLinha}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="data" />
-            <YAxis domain={[0, tarefas.length]} allowDecimals={false} />
-            <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="feitas" stroke="#4caf50" />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
-    </div>
-  </div>
-</div>
-
   );
 };
 

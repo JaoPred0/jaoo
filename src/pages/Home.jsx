@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
+import { motion, AnimatePresence } from 'framer-motion';
 
 Chart.register(ArcElement, Tooltip, Legend);
 
@@ -11,22 +12,17 @@ export default function Home() {
     return hoje.toISOString().slice(0, 10);
   }
 
-  // Pega o histórico completo do localStorage, ou inicia vazio
   const historicoInicial = JSON.parse(localStorage.getItem('statusHistorico')) || {};
-
   const hojeStr = getDataHoje();
 
-  // Se o histórico não tem dados para hoje, inicializa zerado para hoje
   if (!historicoInicial[hojeStr]) {
     historicoInicial[hojeStr] = { Bem: 0, Mal: 0, Pessimo: 0 };
   }
 
-  // Estado para os dados do dia atual (referencia o histórico do dia)
   const [dadosHoje, setDadosHoje] = useState(historicoInicial[hojeStr]);
-  // Estado para o histórico completo (todos os dias)
   const [historico, setHistorico] = useState(historicoInicial);
+  const [fraseDoDia, setFraseDoDia] = useState('');
 
-  // Toda vez que dadosHoje mudar, atualiza o histórico completo e salva no localStorage
   useEffect(() => {
     const novoHistorico = { ...historico, [hojeStr]: dadosHoje };
     setHistorico(novoHistorico);
@@ -43,7 +39,6 @@ export default function Home() {
     }
   }, [dadosHoje]);
 
-  // Função para aumentar o status (incrementa +5)
   function aumentarStatus(status) {
     setDadosHoje((prev) => ({
       ...prev,
@@ -51,7 +46,6 @@ export default function Home() {
     }));
   }
 
-  // Funções de mensagens continuam iguais
   const mensagensBem = [
     'Você está indo muito bem, continue assim!',
     'Dias positivos fortalecem sua jornada!',
@@ -72,13 +66,11 @@ export default function Home() {
 
   function pegarMensagem(status) {
     const randomIndex = (arr) => Math.floor(Math.random() * arr.length);
-
     if (status === 'Bem') return mensagensBem[randomIndex(mensagensBem)];
     if (status === 'Mal') return mensagensMal[randomIndex(mensagensMal)];
     if (status === 'Pessimo') return mensagensPessimo[randomIndex(mensagensPessimo)];
   }
 
-  // Mensagem motivacional baseada nos dados do dia atual
   function mensagemMotivacional() {
     if (dadosHoje.Pessimo > 50) {
       return (
@@ -101,7 +93,6 @@ export default function Home() {
     }
   }
 
-  // Dados do gráfico só do dia atual
   const data = {
     labels: ['Bem', 'Mal', 'Pessimo'],
     datasets: [
@@ -131,13 +122,13 @@ export default function Home() {
     maintainAspectRatio: false,
   };
 
-  // Função que classifica o dia com base no maior valor
   function classificarDia(diaDados) {
     const maiorValor = Math.max(diaDados.Bem, diaDados.Mal, diaDados.Pessimo);
     if (maiorValor === diaDados.Bem) return 'Bom';
     if (maiorValor === diaDados.Mal) return 'Ruim';
     if (maiorValor === diaDados.Pessimo) return 'Péssimo';
   }
+
   function exportarHistorico() {
     const blob = new Blob([JSON.stringify(historico, null, 2)], { type: 'application/json' });
     const link = document.createElement('a');
@@ -145,6 +136,7 @@ export default function Home() {
     link.download = 'historico_status.json';
     link.click();
   }
+
   function resetarHoje() {
     const novoDia = { Bem: 0, Mal: 0, Pessimo: 0 };
     setDadosHoje(novoDia);
@@ -154,36 +146,76 @@ export default function Home() {
     localStorage.removeItem('statusHistorico');
     window.location.reload();
   }
-  const [fraseDoDia, setFraseDoDia] = useState('');
 
+  // Variants para animação do framer-motion
+  const containerVariant = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.15 } },
+  };
+
+  const itemVariant = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } },
+  };
+
+  const chartVariant = {
+    hidden: { opacity: 0, scale: 0.8 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.6 } },
+  };
 
   return (
-    <div className="p-4 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-semibold mb-2 text-white">Bem-vindo, Alemão</h1>
-      <p className="italic text-gray-300 mt-4 mb-6">Frase do dia: "{fraseDoDia}"</p>
+    <motion.div
+      className="p-4 max-w-7xl mx-auto"
+      initial="hidden"
+      animate="visible"
+      variants={containerVariant}
+    >
+      <motion.h1
+        className="text-3xl font-semibold mb-2 text-white"
+        variants={itemVariant}
+      >
+        Bem-vindo, Alemão
+      </motion.h1>
+
+      <motion.p
+        className="italic text-gray-300 mt-4 mb-6"
+        variants={itemVariant}
+      >
+        Frase do dia: "{fraseDoDia}"
+      </motion.p>
 
       <div className="flex flex-col md:flex-row items-center md:items-start gap-6">
-        <div className="w-full md:w-1/3 h-64 md:h-80 bg-gray-800 rounded-lg p-4 shadow-lg">
+        <motion.div
+          className="w-full md:w-1/3 h-64 md:h-80 bg-gray-800 rounded-lg p-4 shadow-lg"
+          variants={chartVariant}
+        >
           <Doughnut data={data} options={options} />
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col gap-4 w-full md:w-2/3 text-white">
-          <h2 className="text-xl font-semibold mb-2">Seu Status Atual</h2>
+        <motion.div
+          className="flex flex-col gap-4 w-full md:w-2/3 text-white"
+          variants={containerVariant}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.h2 className="text-xl font-semibold mb-2" variants={itemVariant}>
+            Seu Status Atual
+          </motion.h2>
 
-          {mensagemMotivacional()}
+          <motion.div variants={itemVariant}>{mensagemMotivacional()}</motion.div>
 
-          <p>
+          <motion.p variants={itemVariant}>
             Você está se sentindo{' '}
             <span className="font-bold text-green-400">Bem</span>: {pegarMensagem('Bem')}
-          </p>
-          <p>
+          </motion.p>
+          <motion.p variants={itemVariant}>
             Tem dias <span className="font-bold text-yellow-400">Mal</span>: {pegarMensagem('Mal')}
-          </p>
-          <p>
+          </motion.p>
+          <motion.p variants={itemVariant}>
             E alguns <span className="font-bold text-red-500">Péssimo</span>: {pegarMensagem('Pessimo')}
-          </p>
+          </motion.p>
 
-          <div className="flex gap-3 flex-wrap">
+          <motion.div className="flex gap-3 flex-wrap" variants={itemVariant}>
             <button
               onClick={() => aumentarStatus('Bem')}
               className="bg-green-600 px-4 py-2 rounded hover:bg-green-700 transition"
@@ -202,13 +234,18 @@ export default function Home() {
             >
               Ver detalhes Péssimo
             </button>
-          </div>
-          <div className="flex gap-4 mt-4">
-            <button onClick={resetarHoje} className="bg-blue-600 px-4 py-2 rounded">Resetar Hoje</button>
-            <button onClick={limparHistorico} className="bg-red-700 px-4 py-2 rounded">Limpar Histórico</button>
-          </div>
+          </motion.div>
 
-          <div className="mt-8">
+          <motion.div className="flex gap-4 mt-4" variants={itemVariant}>
+            <button onClick={resetarHoje} className="bg-blue-600 px-4 py-2 rounded">
+              Resetar Hoje
+            </button>
+            <button onClick={limparHistorico} className="bg-red-700 px-4 py-2 rounded">
+              Limpar Histórico
+            </button>
+          </motion.div>
+
+          <motion.div className="mt-8" variants={itemVariant}>
             <h2 className="text-xl font-semibold mb-4">Histórico Diário</h2>
             <div className="overflow-x-auto">
               <table className="min-w-[600px] w-full text-white border-collapse border border-gray-600">
@@ -222,33 +259,32 @@ export default function Home() {
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.entries(historico)
-                    .sort((a, b) => new Date(b[0]) - new Date(a[0])) // ordena do mais recente para o mais antigo
-                    .map(([data, valores]) => (
-                      <tr key={data}>
-                        <td className="border border-gray-600 p-2">{data}</td>
-                        <td className="border border-gray-600 p-2">{valores.Bem}</td>
-                        <td className="border border-gray-600 p-2">{valores.Mal}</td>
-                        <td className="border border-gray-600 p-2">{valores.Pessimo}</td>
-                        <td
-                          className={`border border-gray-600 p-2 font-bold ${classificarDia(valores) === 'Bom'
-                            ? 'text-green-400'
-                            : classificarDia(valores) === 'Ruim'
-                              ? 'text-yellow-400'
-                              : 'text-red-500'
-                            }`}
-                        >
-                          {classificarDia(valores)}
-                        </td>
-                      </tr>
-                    ))}
+                  {Object.entries(historico).map(([data, valores]) => (
+                    <tr
+                      key={data}
+                      className={`${
+                        data === hojeStr ? 'bg-gray-700' : 'bg-gray-800'
+                      } hover:bg-gray-600`}
+                    >
+                      <td className="border border-gray-600 p-2">{data}</td>
+                      <td className="border border-gray-600 p-2">{valores.Bem}</td>
+                      <td className="border border-gray-600 p-2">{valores.Mal}</td>
+                      <td className="border border-gray-600 p-2">{valores.Pessimo}</td>
+                      <td className="border border-gray-600 p-2">{classificarDia(valores)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
-          </div>
-          <button onClick={exportarHistorico} className="bg-purple-600 px-4 py-2 rounded">Exportar Histórico</button>
-        </div>
+            <button
+              onClick={exportarHistorico}
+              className="mt-4 bg-green-600 px-4 py-2 rounded hover:bg-green-700"
+            >
+              Exportar Histórico JSON
+            </button>
+          </motion.div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }

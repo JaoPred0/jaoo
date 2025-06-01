@@ -9,3 +9,13 @@
     transform: translateY(50px);
     transition: opacity 0.6s ease, transform 0.6s ease;
 }
+/* Esconde scrollbar no Chrome, Safari e Edge */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Esconde scrollbar no Firefox */
+.hide-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none; /* para IE e Edge Legacy */
+}
