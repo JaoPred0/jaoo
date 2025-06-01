@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookAIcon, Home, School, School2Icon, Settings, User, X } from 'lucide-react';
+import { BookAIcon, DiamondIcon, Home, School, School2Icon, Settings, User, X } from 'lucide-react';
 import clsx from 'clsx';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -46,6 +46,11 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
           <li onClick={() => setIsOpen(false)}>
             <Link to="/estudos" className={linkClass('/estudos')}>
               <School size={20} /> Estudos
+            </Link>
+          </li>
+          <li onClick={() => setIsOpen(false)}>
+            <Link to="/diario" className={linkClass('/estudos')}>
+              <DiamondIcon size={20} /> Diario
             </Link>
           </li>
           <li onClick={() => setIsOpen(false)}>

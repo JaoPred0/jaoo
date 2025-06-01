@@ -7,14 +7,15 @@ const Schedule = () => {
   const diasSemanaMadrugada = ['Tempo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
 
   const horarioManha = [
-    ['05:00 - 06:00', 'Matemática', 'Física', 'História', 'Biologia', 'Matemática', 'Simulado ENEM', 'Língua Estrangeira'],
     ['06:00 - 07:00', 'Matemática', 'Física', 'História', 'Biologia', 'Matemática', 'Simulado ENEM', 'Língua Estrangeira'],
-    ['07:00 - 07:30', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso'],
-    ['07:30 - 08:30', 'Português', 'Química', 'Geografia', 'Redação', 'Filosofia', 'Redação', 'Literatura'],
+    ['07:00 - 08:00', 'Matemática', 'Física', 'História', 'Biologia', 'Matemática', 'Simulado ENEM', 'Língua Estrangeira'],
+    ['08:00 - 08:30', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso', 'Descanso'],
     ['08:30 - 09:30', 'Português', 'Química', 'Geografia', 'Redação', 'Filosofia', 'Redação', 'Literatura'],
-    ['09:30 - 10:00', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia'],
-    ['10:00 - 11:00', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão'],
+    ['09:30 - 10:30', 'Português', 'Química', 'Geografia', 'Redação', 'Filosofia', 'Redação', 'Literatura'],
+    ['10:30 - 11:00', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia', 'Sociologia'],
+    ['11:00 - 12:00', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão', 'Revisão'],
   ];
+
 
   const horarioTarde = [
     ['13:00 - 14:00', 'Química', 'Física', 'Matemática', 'Geografia', 'História', 'Redação', 'Sociologia'],

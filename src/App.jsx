@@ -9,6 +9,7 @@ import Estudos from './pages/Estudos';
 import EstudosEmCasa from './pages/EstudosEmCasa';
 import IFMS from './pages/IFMS';
 import Biblioteca from './pages/Biblioteca';
+import Diario from './pages/Diario';
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -28,6 +29,7 @@ function App() {
             <Route path="/estudos-em-casa" element={<EstudosEmCasa />} />
             <Route path="/ifms" element={<IFMS />} />
             <Route path="/biblioteca-livros" element={<Biblioteca />} />
+            <Route path="/diario" element={<Diario />} />
           </Routes>
         </main>
       </div>
