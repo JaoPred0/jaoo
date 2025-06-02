@@ -11,18 +11,20 @@ import IFMS from './pages/IFMS';
 import Biblioteca from './pages/Biblioteca';
 import Diario from './pages/Diario';
 import Agenda from './pages/Agenda';
-import Pomodoro from './pages/Pomodoro';
-import BemEstar from './pages/BemEstar';
-import Progresso from './pages/Progresso';
 import Medalhas from './pages/Medalhas';
 import Projetos from './pages/Projetos';
+import Tarefas from './pages/Tarefas';
+import CardTarefas from './pages/CardTarefas';
+import Leituras from './pages/Leituras';
+import LivroDetalhe from './pages/LivroDetalhe';
+import DashboardLivros from './pages/DashboardLivros';
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <div className="h-screen bg-gray-900 text-white overflow-hidden">
       <Sidebar isOpen={menuOpen} setIsOpen={setMenuOpen} />
-      
+
       <div className="md:ml-64 flex flex-col h-full">
         <Navbar toggleMenu={() => setMenuOpen(!menuOpen)} />
         <main className="p-4 overflow-y-auto flex-1">
@@ -36,11 +38,13 @@ function App() {
             <Route path="/biblioteca-livros" element={<Biblioteca />} />
             <Route path="/diario" element={<Diario />} />
             <Route path="/agenda" element={<Agenda />} />
-            <Route path="/pomodoro" element={<Pomodoro />} />
-            <Route path="/bem-estar" element={<BemEstar />} />
-            <Route path="/progresso" element={<Progresso />} />
             <Route path="/medalhas" element={<Medalhas />} />
             <Route path="/projetos" element={<Projetos />} />
+            <Route path="/tarefas" element={<Tarefas />} />
+            <Route path="/tarefas/:id" element={<CardTarefas />} />
+            <Route path="/leituras" element={<Leituras />} />
+            <Route path="/dashboard-livros" element={<DashboardLivros />} />
+            <Route path="/livros/:id" element={<LivroDetalhe />} />
           </Routes>
         </main>
       </div>

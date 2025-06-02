@@ -3,26 +3,15 @@ import { motion } from "framer-motion";
 
 const projetos = [
   {
-    id: 1,
-    nome: "Meu Projeto 1",
-    descricao: "Projeto incrível feito com React e API.",
-    url: "https://github.com/seuusuario/projeto1",
-    imagem: "https://via.placeholder.com/300x180.png?text=Capa+Projeto+1",
-  },
-  {
-    id: 2,
-    nome: "Projeto Node.js",
-    descricao: "API RESTful para gerenciar usuários.",
-    url: "https://github.com/seuusuario/projeto-node",
-    imagem: "https://via.placeholder.com/300x180.png?text=Capa+Projeto+Node",
-  },
-  {
-    id: 3,
-    nome: "App Mobile",
-    descricao: "Aplicativo mobile com funcionalidades offline.",
-    url: "https://github.com/seuusuario/app-mobile",
-    imagem: "https://via.placeholder.com/300x180.png?text=Capa+App+Mobile",
-  },
+    "id": 1,
+    "nome": "MAX - Plataforma de IPTV",
+    "descricao": "Plataforma moderna de IPTV com mais de 400 canais, filmes, séries e esportes. Interface responsiva com animações e suporte a múltiplos dispositivos.",
+    "url": "https://github.com/JaoPred0/max.git",
+    "deploy": "https://max-chi-nine.vercel.app/",
+    "imagem": "./capa_projeto1.png"
+  }
+
+
 ];
 
 const cardVariants = {

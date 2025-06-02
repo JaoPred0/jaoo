@@ -1,5 +1,12 @@
-import React, { useState, useEffect } from 'react';
-
+import { useEffect, useState } from "react";
+import { db } from "../firebase";
+import {
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+} from "firebase/firestore";
 export const Horario = () => {
     const diasSemana = ['Tempo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta'];
 
@@ -68,37 +75,42 @@ export const Lembretes = () => {
   const [lembretes, setLembretes] = useState([]);
   const [texto, setTexto] = useState("");
   const [data, setData] = useState("");
-  const [cor, setCor] = useState("#1f2937"); // cor padrão
+  const [cor, setCor] = useState("#1f2937");
 
-  // Carregar lembretes do localStorage quando o componente monta
+  const colecaoRef = collection(db, "lembretes");
+
   useEffect(() => {
-    const lembretesSalvos = localStorage.getItem("lembretes");
-    if (lembretesSalvos) {
-      setLembretes(JSON.parse(lembretesSalvos));
-    }
+    const carregarLembretes = async () => {
+      const snap = await getDocs(colecaoRef);
+      const lista = snap.docs.map((doc) => ({ ...doc.data(), id: doc.id }));
+      setLembretes(lista);
+      localStorage.setItem("lembretes", JSON.stringify(lista));
+    };
+
+    carregarLembretes();
   }, []);
 
-  // Sempre que lembretes mudarem, salva no localStorage
-  useEffect(() => {
-    localStorage.setItem("lembretes", JSON.stringify(lembretes));
-  }, [lembretes]);
-
-  const adicionarLembrete = (e) => {
+  const adicionarLembrete = async (e) => {
     e.preventDefault();
     if (texto.trim() === "" && data === "") return;
 
-    setLembretes([
-      ...lembretes,
-      { texto: texto.trim(), data: data || null, cor },
-    ]);
+    const novo = {
+      texto: texto.trim(),
+      data: data || null,
+      cor,
+    };
+
+    const docRef = await addDoc(colecaoRef, novo);
+    setLembretes([...lembretes, { ...novo, id: docRef.id }]);
+
     setTexto("");
     setData("");
     setCor("#1f2937");
   };
 
-  const removerLembrete = (index) => {
-    const novos = lembretes.filter((_, i) => i !== index);
-    setLembretes(novos);
+  const removerLembrete = async (id) => {
+    await deleteDoc(doc(db, "lembretes", id));
+    setLembretes(lembretes.filter((item) => item.id !== id));
   };
 
   return (
@@ -113,14 +125,12 @@ export const Lembretes = () => {
           onChange={(e) => setTexto(e.target.value)}
           className="rounded-md bg-gray-800 border border-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
         />
-
         <input
           type="date"
           value={data}
           onChange={(e) => setData(e.target.value)}
           className="rounded-md bg-gray-800 border border-gray-700 px-4 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
         />
-
         <label className="flex items-center gap-2">
           <span>Cor do fundo:</span>
           <input
@@ -131,7 +141,6 @@ export const Lembretes = () => {
             aria-label="Escolher cor do fundo do lembrete"
           />
         </label>
-
         <button
           type="submit"
           className="bg-red-600 hover:bg-red-700 rounded-md px-5 py-2 font-semibold transition-colors"
@@ -146,7 +155,7 @@ export const Lembretes = () => {
         <ul className="space-y-3">
           {lembretes.map((item, index) => (
             <li
-              key={index}
+              key={item.id || index}
               className="flex justify-between items-center rounded-md px-4 py-3 shadow"
               style={{ backgroundColor: item.cor }}
             >
@@ -159,9 +168,8 @@ export const Lembretes = () => {
                 )}
               </div>
               <button
-                onClick={() => removerLembrete(index)}
+                onClick={() => removerLembrete(item.id)}
                 className="bg-red-700 hover:bg-red-800 text-white rounded-md px-3 py-1 font-bold transition-colors"
-                aria-label="Remover lembrete"
               >
                 ❌
               </button>
@@ -172,3 +180,4 @@ export const Lembretes = () => {
     </div>
   );
 };
+

@@ -1,13 +1,6 @@
 import React from 'react';
 import {
-  FiFileText,
-  FiCheckCircle,
-  FiBriefcase,
-  FiBell,
-  FiMessageSquare,
-  FiGlobe,
   FiList,
-  FiShoppingCart,
   FiBook,
   FiBarChart2,
   FiCode,
@@ -37,18 +30,14 @@ const navItems = [
   { label: 'Estudos', icon: <School size={20} />, path: '/estudos' },
   { label: 'Diário', icon: <DiamondIcon size={20} />, path: '/diario' },
   { label: 'Agenda', icon: <CalendarDays size={20} />, path: '/agenda' },
-  { label: 'Pomodoro', icon: <AlarmClock size={20} />, path: '/pomodoro' },
-  { label: 'Bem-estar', icon: <HeartPulse size={20} />, path: '/bem-estar' },
-  { label: 'Progresso', icon: <BarChart2 size={20} />, path: '/progresso' },
   { label: 'Medalhas', icon: <Medal size={20} />, path: '/medalhas' },
   { label: 'Projetos', icon: <Code size={20} />, path: '/projetos' },
   { label: 'Perfil', icon: <User size={20} />, path: '/perfil' },
+  { label: 'Tarefas', icon: <FiList size={20} />, path: '/tarefas' },
+  { label: 'Leituras', icon: <FiBook size={20} />, path: '/leituras' },
 
 
   // Falta terminar
-  { label: 'Tarefas', icon: <FiList size={20} />, path: '/tarefas' },
-  { label: 'Compras', icon: <FiShoppingCart size={20} />, path: '/compras' },
-  { label: 'Leituras', icon: <FiBook size={20} />, path: '/leituras' },
   { label: 'Relatórios', icon: <FiBarChart2 size={20} />, path: '/relatorios' },
 
   // Dev tools

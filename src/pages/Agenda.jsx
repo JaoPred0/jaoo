@@ -1,12 +1,21 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
+import { db } from '../firebase' // importe seu arquivo firebase.js
+import {
+  collection,
+  addDoc,
+  deleteDoc,
+  doc,
+  onSnapshot,
+  query,
+  orderBy
+} from 'firebase/firestore'
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
+  visible: {
+    opacity: 1,
     y: 0,
-    transition: { 
+    transition: {
       when: "beforeChildren",
       staggerChildren: 0.15,
       duration: 0.5,
@@ -38,55 +47,65 @@ const Agenda = () => {
   const [lembretes, setLembretes] = useState([])
   const [novaData, setNovaData] = useState('')
   const [novoTexto, setNovoTexto] = useState('')
-  const [inputFocus, setInputFocus] = useState({data: false, texto: false})
+  const [inputFocus, setInputFocus] = useState({ data: false, texto: false })
 
-  // Carregar do localStorage ao iniciar
+  // Referência para a coleção "agenda"
+  const agendaRef = collection(db, 'agenda')
+
+  // Carregar lembretes do Firestore com listener em tempo real
   useEffect(() => {
-    const dadosSalvos = localStorage.getItem('lembretes')
-    if (dadosSalvos) {
-      setLembretes(JSON.parse(dadosSalvos))
-    }
-  }, [])
+    const q = query(agendaRef, orderBy('data', 'asc'))
 
-  // Salvar sempre que lembretes mudar
-  useEffect(() => {
-    localStorage.setItem('lembretes', JSON.stringify(lembretes))
-  }, [lembretes])
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      const lista = []
+      querySnapshot.forEach((doc) => {
+        lista.push({ id: doc.id, ...doc.data() })
+      })
+      setLembretes(lista)
+    })
 
-  const adicionarLembrete = (e) => {
+    return () => unsubscribe() // limpa o listener ao desmontar componente
+  }, [agendaRef])
+
+  // Adicionar novo lembrete no Firestore
+  const adicionarLembrete = async (e) => {
     e.preventDefault()
     if (!novaData || !novoTexto) return
 
-    const novo = {
-      id: Date.now(),
-      data: novaData,
-      texto: novoTexto,
-    }
+    try {
+      await addDoc(agendaRef, {
+        data: novaData,
+        texto: novoTexto,
+        createdAt: new Date()
+      })
 
-    setLembretes([...lembretes, novo])
-    setNovaData('')
-    setNovoTexto('')
+      setNovaData('')
+      setNovoTexto('')
+    } catch (error) {
+      console.error('Erro ao adicionar lembrete: ', error)
+    }
   }
 
-  const apagarLembrete = (id) => {
-    setLembretes((prev) => prev.filter((item) => item.id !== id))
+  // Apagar lembrete no Firestore
+  const apagarLembrete = async (id) => {
+    try {
+      await deleteDoc(doc(db, 'agenda', id))
+    } catch (error) {
+      console.error('Erro ao apagar lembrete: ', error)
+    }
   }
 
   return (
-    <motion.div 
+    <motion.div
       className="p-8 max-w-xl mx-auto font-sans text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900 min-h-screen"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
-      <motion.h2 
-        className="text-2xl font-bold mb-4"
-        variants={itemVariants}
-      >
+      <motion.h2 className="text-2xl font-bold mb-4" variants={itemVariants}>
         Agenda
       </motion.h2>
 
-      {/* Formulário */}
       <motion.form
         onSubmit={adicionarLembrete}
         className="mb-6 space-y-4 p-4 rounded-lg shadow bg-gray-100 dark:bg-gray-800"
@@ -98,12 +117,12 @@ const Agenda = () => {
             type="date"
             value={novaData}
             onChange={(e) => setNovaData(e.target.value)}
-            onFocus={() => setInputFocus(f => ({...f, data: true}))}
-            onBlur={() => setInputFocus(f => ({...f, data: false}))}
+            onFocus={() => setInputFocus((f) => ({ ...f, data: true }))}
+            onBlur={() => setInputFocus((f) => ({ ...f, data: false }))}
             className="w-full border px-3 py-2 rounded bg-white dark:bg-gray-700 dark:border-gray-600"
             variants={inputVariants}
-            animate={inputFocus.data ? "focus" : "rest"}
-            transition={{ type: "spring", stiffness: 300 }}
+            animate={inputFocus.data ? 'focus' : 'rest'}
+            transition={{ type: 'spring', stiffness: 300 }}
           />
         </motion.div>
         <motion.div>
@@ -114,11 +133,11 @@ const Agenda = () => {
             onChange={(e) => setNovoTexto(e.target.value)}
             placeholder="Digite o lembrete"
             className="w-full border px-3 py-2 rounded bg-white dark:bg-gray-700 dark:border-gray-600"
-            onFocus={() => setInputFocus(f => ({...f, texto: true}))}
-            onBlur={() => setInputFocus(f => ({...f, texto: false}))}
+            onFocus={() => setInputFocus((f) => ({ ...f, texto: true }))}
+            onBlur={() => setInputFocus((f) => ({ ...f, texto: false }))}
             variants={inputVariants}
-            animate={inputFocus.texto ? "focus" : "rest"}
-            transition={{ type: "spring", stiffness: 300 }}
+            animate={inputFocus.texto ? 'focus' : 'rest'}
+            transition={{ type: 'spring', stiffness: 300 }}
           />
         </motion.div>
         <motion.button
@@ -128,13 +147,15 @@ const Agenda = () => {
           whileHover="hover"
           whileTap="tap"
           disabled={!novaData || !novoTexto}
-          style={{opacity: (!novaData || !novoTexto) ? 0.6 : 1, cursor: (!novaData || !novoTexto) ? 'not-allowed' : 'pointer'}}
+          style={{
+            opacity: !novaData || !novoTexto ? 0.6 : 1,
+            cursor: !novaData || !novoTexto ? 'not-allowed' : 'pointer',
+          }}
         >
           Adicionar
         </motion.button>
       </motion.form>
 
-      {/* Lista de Lembretes com animação */}
       <motion.ul className="space-y-4" variants={containerVariants}>
         <AnimatePresence>
           {lembretes.map((item) => (

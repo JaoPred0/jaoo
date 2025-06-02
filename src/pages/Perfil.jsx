@@ -33,7 +33,7 @@ export default function Perfil() {
         <h1 className="text-3xl font-semibold mb-4">Perfil do Usuário</h1>
         <div className="flex items-center space-x-4">
           <motion.img
-            src="../../public/perfil.png"
+            src="./perfil.png"
             alt="Foto do usuário"
             className="w-24 h-24 rounded-full border-4 border-gray-600"
             initial={{ scale: 0.8 }}

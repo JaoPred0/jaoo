@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 
 const livrosMock = [
-  // {
-  //   id: 1,
-  //   titulo: 'Dom Casmurro',
-  //   autor: 'Machado de Assis',
-  //   categoria: 'Romance',
-  //   urlCapa: 'https://covers.openlibrary.org/b/id/8231856-L.jpg',
-  //   urlLivro: 'https://pt.wikipedia.org/wiki/Dom_Casmurro',
-  // },
+  {
+    id: 1,
+    titulo: 'Sociologia Hoje',
+    autor: 'Machado de Assis',
+    categoria: 'Romance',
+    urlCapa: '/public/biblioteca/sociologia_hoje.png',
+    urlLivro: 'https://drive.google.com/drive/folders/0B5HxDYbtKJ7dajd6a3prR2FVNm8?resourcekey=0-SKhfGMWcm6gdtH8QvOFDmA',
+  },
 ];
 
 const categorias = ['Todos', 'Romance', 'Infantil', 'Realismo Mágico', 'Distopia', 'Fantasia'];
