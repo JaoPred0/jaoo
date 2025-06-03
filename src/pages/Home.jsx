@@ -4,7 +4,7 @@ import { Chart, ArcElement, Tooltip, Legend } from 'chart.js';
 import { db } from '../firebase';
 import { doc, getDoc, setDoc, collection, getDocs } from 'firebase/firestore';
 import StudyCard from '../components/StudyCard';
-import IfmsCard from '../components/IFMSCard';
+import IfmsCard from '../components/IfmsCard';
 import DiarioCharts from '../components/DiarioCharts';
 
 Chart.register(ArcElement, Tooltip, Legend);
