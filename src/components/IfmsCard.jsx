@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 
-const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-
 // Horários no formato: [intervalo (ex: "07:00 - 07:45"), matéria dom, seg, ter, qua, qui, sex, sab]
 const horarioMatutino = [
   ['07:00 - 07:45', '', '', '', '', 'MATEMÁTICA 3', ''],

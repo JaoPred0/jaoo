@@ -1,8 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
-const diasSemana = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
-
-// Horários no formato: [início, fim, matéria para cada dia da semana (0=Domingo,1=Segunda,...)]
+// Horários de aulas
 const horarioManha = [
   ['06:00', '07:00', ['Matemática', 'Física', 'História', 'Biologia', 'Matemática', 'Simulado ENEM', 'Língua Estrangeira']],
   ['07:00', '08:00', ['Matemática', 'Física', 'História', 'Biologia', 'Matemática', 'Simulado ENEM', 'Língua Estrangeira']],
@@ -38,7 +36,7 @@ const horarioMadrugada = [
   ['03:30', '04:00', ['Revisão / Organização', 'Revisão / Organização', 'Revisão / Organização', 'Revisão / Organização', 'Revisão / Organização', 'Revisão / Organização', 'Revisão / Organização']],
 ];
 
-// Função auxiliares para manipular horários
+// Funções auxiliares
 function parseTime(timeStr) {
   const [h, m] = timeStr.split(':').map(Number);
   return { h, m };
@@ -55,7 +53,7 @@ function nowInMinutes() {
 
 function getCurrentAndNextClass(schedule) {
   const now = new Date();
-  const day = now.getDay(); // 0=Domingo
+  const day = now.getDay();
   const currentMinutes = nowInMinutes();
 
   for (let i = 0; i < schedule.length; i++) {
@@ -68,18 +66,20 @@ function getCurrentAndNextClass(schedule) {
     let endMinutes = toMinutes(eh, em);
 
     if (endMinutes <= startMinutes) endMinutes += 24 * 60;
-
     let adjustedNow = currentMinutes;
     if (currentMinutes < startMinutes) adjustedNow += 24 * 60;
 
     if (adjustedNow >= startMinutes && adjustedNow < endMinutes) {
       const timeLeft = endMinutes - adjustedNow;
-      const next = schedule[i + 1];
+      const duration = endMinutes - startMinutes;
+      const progress = ((duration - timeLeft) / duration) * 100;
+
       return {
         currentClass: subjects[day],
         timeLeft,
-        nextClass: next ? next[2][day] : 'Fim do dia',
+        nextClass: schedule[i + 1] ? schedule[i + 1][2][day] : 'Fim do dia',
         endTime: end,
+        progress,
       };
     }
   }
@@ -89,15 +89,18 @@ function getCurrentAndNextClass(schedule) {
     timeLeft: 0,
     nextClass: 'Nenhuma',
     endTime: null,
+    progress: 0,
   };
 }
 
+// Componente principal
 export default function StudyCard() {
   const [info, setInfo] = useState({
     currentClass: '',
     timeLeft: 0,
     nextClass: '',
     endTime: null,
+    progress: 0,
   });
 
   useEffect(() => {
@@ -115,7 +118,7 @@ export default function StudyCard() {
     }
 
     atualizar();
-    const interval = setInterval(atualizar, 30 * 1000);
+    const interval = setInterval(atualizar, 1000); // Atualiza a cada segundo
 
     return () => clearInterval(interval);
   }, []);
@@ -124,22 +127,32 @@ export default function StudyCard() {
   const minutosDisplay = minutos > 0 ? `${minutos} min` : 'Terminando...';
 
   return (
-    <div className="bg-gray-800 rounded-lg p-6 flex flex-col md:flex-row items-center justify-between text-white shadow-lg w-full max-w-4xl mx-auto space-y-6 md:space-y-0">
-      <div className="flex-1 text-center md:text-left">
-        <h3 className="text-lg font-semibold mb-1">Aula Atual</h3>
-        <p className="text-2xl font-bold">{info.currentClass}</p>
-        {info.endTime && <p className="text-sm text-gray-400">Termina às {info.endTime}</p>}
+    <div className="bg-gray-800 rounded-lg p-6 text-white shadow-lg w-full max-w-4xl mx-auto space-y-4">
+      <div className="flex flex-col md:flex-row items-center justify-between">
+        <div className="flex-1 text-center md:text-left">
+          <h3 className="text-lg font-semibold mb-1">Aula Atual</h3>
+          <p className="text-2xl font-bold">{info.currentClass}</p>
+          {info.endTime && <p className="text-sm text-gray-400">Termina às {info.endTime}</p>}
+        </div>
+
+        <div className="flex-1 text-center">
+          <h3 className="text-lg font-semibold mb-1">Tempo Restante</h3>
+          <p className="text-2xl font-bold">{minutosDisplay}</p>
+        </div>
+
+        <div className="flex-1 text-center md:text-right">
+          <h3 className="text-lg font-semibold mb-1">Próxima Aula</h3>
+          <p className="text-xl font-medium">{info.nextClass}</p>
+        </div>
       </div>
 
-      <div className="flex-1 text-center">
-        <h3 className="text-lg font-semibold mb-1">Tempo Restante</h3>
-        <p className="text-2xl font-bold">{minutosDisplay}</p>
-      </div>
-
-      <div className="flex-1 text-center md:text-right">
-        <h3 className="text-lg font-semibold mb-1">Próxima Aula</h3>
-        <p className="text-xl font-medium">{info.nextClass}</p>
+      {/* Linha de progresso */}
+      <div className="w-full h-3 bg-gray-600 rounded overflow-hidden mt-2">
+        <div
+          className="h-full bg-green-500 transition-all duration-500 ease-linear"
+          style={{ width: `${info.progress}%` }}
+        />
       </div>
     </div>
-  )
+  );
 }
