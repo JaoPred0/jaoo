@@ -20,6 +20,9 @@ import Leituras from './pages/Leituras';
 import LivroDetalhe from './pages/LivroDetalhe';
 import DashboardLivros from './pages/DashboardLivros';
 import JaoX from './pages/JaoX';
+import Animes from './pages/Animes';
+import AnimeDetalhes from './pages/AnimeDetalhes';
+import AdicionarAnime from './pages/AdicionarAnime';
 const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -50,6 +53,9 @@ const App = () => {
             <Route path="/dashboard-livros" element={<DashboardLivros />} />
             <Route path="/livros/:id" element={<LivroDetalhe />} />
             <Route path="/jaox" element={<JaoX />} />
+            <Route path="/animes" element={<Animes />} />
+            <Route path="/animes/:id" element={<AnimeDetalhes />} />
+            <Route path="/animes/adicionar" element={<AdicionarAnime />} />
           </Routes>
         </main>
       </div>

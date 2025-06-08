@@ -4,12 +4,12 @@ import clsx from 'clsx';
 import {
   FiList, FiBook, FiBarChart2, FiCode, FiDatabase,
   FiTerminal, FiCloud, FiZap, FiTool, FiCpu,
-  FiGitBranch, FiPackage, FiActivity, FiTag
+  FiGitBranch, FiPackage, FiActivity, FiTag,
 } from 'react-icons/fi';
 import {
   AlarmClock, BarChart2, CalendarDays, Code,
   DiamondIcon, HeartPulse, Home, ListOrdered,
-  School, User, X, Medal
+  School, User, X, Medal, Sparkles
 } from 'lucide-react';
 
 const navItems = [
@@ -23,17 +23,7 @@ const navItems = [
   { label: 'Perfil', icon: <User size={20} />, path: '/perfil' },
   { label: 'Tarefas', icon: <FiList size={20} />, path: '/tarefas' },
   { label: 'Leituras', icon: <FiBook size={20} />, path: '/leituras' },
-  { label: 'Relatórios', icon: <FiBarChart2 size={20} />, path: '/relatorios' },
-  { label: 'IDE', icon: <FiCode size={20} />, path: '/ide' },
-  { label: 'Banco de Dados', icon: <FiDatabase size={20} />, path: '/banco-de-dados' },
-  { label: 'Terminal', icon: <FiTerminal size={20} />, path: '/terminal' },
-  { label: 'Cloud', icon: <FiCloud size={20} />, path: '/cloud' },
-  { label: 'Otimização', icon: <FiZap size={20} />, path: '/otimizacao' },
-  { label: 'Ferramentas', icon: <FiTool size={20} />, path: '/ferramentas' },
-  { label: 'Monitoramento', icon: <FiCpu size={20} />, path: '/monitoramento' },
-  { label: 'Git', icon: <FiGitBranch size={20} />, path: '/git' },
-  { label: 'Pacotes', icon: <FiPackage size={20} />, path: '/pacotes' },
-  { label: 'Logs', icon: <FiActivity size={20} />, path: '/logs' },
+  { label: 'Animes', icon: <Sparkles size={20} />, path: '/animes' }
 ];
 
 const Sidebar = ({ isOpen, setIsOpen }) => {
