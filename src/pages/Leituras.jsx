@@ -19,41 +19,54 @@ const Livros = () => {
   }, []);
 
   return (
-    <div className="p-6 bg-gray-900 min-h-screen text-gray-100">
-      <h1 className="text-3xl font-bold mb-6">Livros</h1>
+  <div className="p-8 min-h-screen text-gray-100">
+    <h1 className="text-4xl font-extrabold mb-8 tracking-wide select-none">
+      📚 Livros
+    </h1>
 
-      <Link
-        to="/dashboard-livros"
-        className="mb-6 inline-block bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded"
-      >
-        Ir para Dashboard (Adicionar livro)
-      </Link>
+    <Link
+      to="/dashboard-livros"
+      className="mb-8 inline-block bg-blue-600 hover:bg-blue-700 transition-colors duration-300 px-5 py-3 rounded-lg font-semibold shadow-md shadow-blue-800/50"
+    >
+      Ir para Dashboard (Adicionar livro)
+    </Link>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-        {livros.map((livro, i) => (
-          <motion.div
-            key={livro.id}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.1, duration: 0.5, ease: 'easeOut' }}
-            whileHover={{ scale: 1.05, boxShadow: '0 10px 20px rgba(0,0,0,0.6)' }}
-            whileTap={{ scale: 0.95 }}
-            className="bg-gray-800 rounded-xl shadow-lg overflow-hidden cursor-pointer"
-          >
-            <Link to={`/livros/${livro.id}`}>
-              <img src={livro.capaUrl} alt={livro.titulo} className="w-full h-56 object-cover" />
-              <div className="p-4">
-                <h2 className="text-xl font-semibold truncate">{livro.titulo}</h2>
-                {livro.descricao && (
-                  <p className="mt-2 text-gray-400 text-sm line-clamp-3">{livro.descricao}</p>
-                )}
-              </div>
-            </Link>
-          </motion.div>
-        ))}
-      </div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+      {livros.map((livro, i) => (
+        <motion.div
+          key={livro.id}
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: i * 0.12, duration: 0.5, ease: 'easeOut' }}
+          whileTap={{ scale: 0.95 }}
+          className="relative rounded-xl overflow-hidden cursor-pointer  backdrop-blur-md border border-gray-700 shadow-lg transition-shadow duration-300"
+        >
+          <Link to={`/livros/${livro.id}`}>
+            <div className="h-64 w-full overflow-hidden rounded-t-xl">
+              <img
+                src={livro.capaUrl}
+                alt={livro.titulo}
+                className="w-full h-full object-cover transition-transform duration-300 ease-in-out hover:scale-105"
+                loading="lazy"
+              />
+            </div>
+            <div className="p-5">
+              <h2 className="text-lg font-semibold truncate text-white">
+                {livro.titulo}
+              </h2>
+              {livro.descricao && (
+                <p className="mt-2 text-gray-300 text-sm line-clamp-3 select-text">
+                  {livro.descricao}
+                </p>
+              )}
+            </div>
+          </Link>
+        </motion.div>
+      ))}
     </div>
-  );
+  </div>
+);
+
 };
 
 export default Livros;

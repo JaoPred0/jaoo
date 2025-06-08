@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Navbar from './components/Navbar';
+
+// Páginas
 import Home from './pages/Home';
 import Perfil from './pages/Perfil';
 import Configuracoes from './pages/Configuracoes';
 import Estudos from './pages/Estudos';
 import EstudosEmCasa from './pages/EstudosEmCasa';
 import IFMS from './pages/IFMS';
-import Biblioteca from './pages/Biblioteca';
 import Diario from './pages/Diario';
 import Agenda from './pages/Agenda';
 import Medalhas from './pages/Medalhas';
@@ -18,16 +19,20 @@ import CardTarefas from './pages/CardTarefas';
 import Leituras from './pages/Leituras';
 import LivroDetalhe from './pages/LivroDetalhe';
 import DashboardLivros from './pages/DashboardLivros';
-function App() {
+import JaoX from './pages/JaoX';
+const App = () => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="h-screen bg-gray-900 text-white overflow-hidden">
+    <div className="h-screen bg-gradient-to-b from-gray-950 via-gray-900 to-gray-950 text-white overflow-hidden">
+      {/* Sidebar */}
       <Sidebar isOpen={menuOpen} setIsOpen={setMenuOpen} />
 
-      <div className="md:ml-64 flex flex-col h-full">
-        <Navbar toggleMenu={() => setMenuOpen(!menuOpen)} />
-        <main className="p-4 overflow-y-auto flex-1">
+      {/* Área principal */}
+      <div className="md:ml-72 flex flex-col h-full transition-all duration-300">
+        <Navbar toggleMenu={() => setMenuOpen(prev => !prev)} />
+
+        <main className="p-4 overflow-y-auto flex-1 hide-scrollbar">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/perfil" element={<Perfil />} />
@@ -35,7 +40,6 @@ function App() {
             <Route path="/estudos" element={<Estudos />} />
             <Route path="/estudos-em-casa" element={<EstudosEmCasa />} />
             <Route path="/ifms" element={<IFMS />} />
-            <Route path="/biblioteca-livros" element={<Biblioteca />} />
             <Route path="/diario" element={<Diario />} />
             <Route path="/agenda" element={<Agenda />} />
             <Route path="/medalhas" element={<Medalhas />} />
@@ -45,11 +49,12 @@ function App() {
             <Route path="/leituras" element={<Leituras />} />
             <Route path="/dashboard-livros" element={<DashboardLivros />} />
             <Route path="/livros/:id" element={<LivroDetalhe />} />
+            <Route path="/jaox" element={<JaoX />} />
           </Routes>
         </main>
       </div>
     </div>
   );
-}
+};
 
 export default App;

@@ -1,11 +1,18 @@
 import React from 'react';
 import { Menu } from 'lucide-react';
+import { Layout, Typography } from 'antd';
+
+const { Header } = Layout;
+const { Title } = Typography;
 
 const Navbar = ({ toggleMenu }) => {
   return (
-    <header className="bg-gray-900 text-white p-4 flex items-center justify-between md:justify-center shadow-md">
-      {/* Botão menu: só aparece em telas pequenas */}
-      <button
+    <Header
+      style={{ backgroundColor: '#040814' }}
+      className="backdrop-blur-lg text-white shadow-md px-4 flex items-center justify-between md:justify-center h-16"
+    >
+      {/* Botão menu (mobile) */}
+      <button style={{color: '#ffffff'}}
         className="md:hidden text-white hover:text-blue-400 transition-colors"
         onClick={toggleMenu}
         aria-label="Abrir menu lateral"
@@ -13,14 +20,17 @@ const Navbar = ({ toggleMenu }) => {
         <Menu size={24} />
       </button>
 
-      {/* Título centralizado em telas médias e maiores */}
-      <h1 className="text-xl font-bold md:absolute md:left-1/2 md:transform md:-translate-x-1/2">
+      {/* Título centralizado no desktop */}
+      <Title
+        level={4}
+        className="!text-white !m-0 text-xl font-bold md:absolute md:left-1/2 md:-translate-x-1/2 md:block"
+      >
         Jaoo
-      </h1>
+      </Title>
 
-      {/* Espaço para equilibrar o layout no desktop (pode ser vazio) */}
+      {/* Espaço vazio (desktop) */}
       <div className="hidden md:block w-6" />
-    </header>
+    </Header>
   );
 };
 

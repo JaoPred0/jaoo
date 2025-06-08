@@ -10,6 +10,7 @@ import {
   query,
   orderBy
 } from 'firebase/firestore'
+import { CalendarDays, StickyNote, Plus, Trash2 } from "lucide-react";
 const containerVariants = {
   hidden: { opacity: 0, y: 20 },
   visible: {
@@ -96,67 +97,79 @@ const Agenda = () => {
   }
 
   return (
+  <motion.div
+    className="min-h-screen px-6 py-10 to-black text-white font-sans"
+    variants={containerVariants}
+    initial="hidden"
+    animate="visible"
+  >
     <motion.div
-      className="p-8 max-w-xl mx-auto font-sans text-gray-800 dark:text-gray-100 bg-white dark:bg-gray-900 min-h-screen"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
+      className="max-w-2xl mx-auto backdrop-blur-md  border border-white/20 rounded-2xl shadow-2xl p-8 transition-all"
+      variants={itemVariants}
     >
-      <motion.h2 className="text-2xl font-bold mb-4" variants={itemVariants}>
-        Agenda
+      <motion.h2
+        className="text-3xl font-bold text-center mb-8 text-white drop-shadow-md flex items-center justify-center gap-2"
+        variants={itemVariants}
+      >
+        <CalendarDays className="w-8 h-8 text-indigo-400" /> Agenda Interativa
       </motion.h2>
 
       <motion.form
         onSubmit={adicionarLembrete}
-        className="mb-6 space-y-4 p-4 rounded-lg shadow bg-gray-100 dark:bg-gray-800"
+        className="space-y-6 mb-10"
         variants={itemVariants}
       >
-        <motion.div>
-          <label className="block text-sm font-semibold mb-1">Data:</label>
+        <motion.div className="flex flex-col gap-1" variants={inputVariants}>
+          <label className="text-sm font-medium text-white/90 flex items-center gap-2">
+            <CalendarDays className="w-4 h-4 text-indigo-300" /> Data:
+          </label>
           <motion.input
             type="date"
             value={novaData}
             onChange={(e) => setNovaData(e.target.value)}
-            onFocus={() => setInputFocus((f) => ({ ...f, data: true }))}
-            onBlur={() => setInputFocus((f) => ({ ...f, data: false }))}
-            className="w-full border px-3 py-2 rounded bg-white dark:bg-gray-700 dark:border-gray-600"
-            variants={inputVariants}
+            onFocus={() => setInputFocus(f => ({ ...f, data: true }))}
+            onBlur={() => setInputFocus(f => ({ ...f, data: false }))}
+            className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             animate={inputFocus.data ? 'focus' : 'rest'}
             transition={{ type: 'spring', stiffness: 300 }}
           />
         </motion.div>
-        <motion.div>
-          <label className="block text-sm font-semibold mb-1">Lembrete:</label>
+
+        <motion.div className="flex flex-col gap-1" variants={inputVariants}>
+          <label className="text-sm font-medium text-white/90 flex items-center gap-2">
+            <StickyNote className="w-4 h-4 text-indigo-300" /> Lembrete:
+          </label>
           <motion.input
             type="text"
             value={novoTexto}
             onChange={(e) => setNovoTexto(e.target.value)}
-            placeholder="Digite o lembrete"
-            className="w-full border px-3 py-2 rounded bg-white dark:bg-gray-700 dark:border-gray-600"
-            onFocus={() => setInputFocus((f) => ({ ...f, texto: true }))}
-            onBlur={() => setInputFocus((f) => ({ ...f, texto: false }))}
-            variants={inputVariants}
+            placeholder="Ex: Estudar React às 20h"
+            onFocus={() => setInputFocus(f => ({ ...f, texto: true }))}
+            onBlur={() => setInputFocus(f => ({ ...f, texto: false }))}
+            className="w-full px-4 py-2 rounded-lg bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-indigo-400 transition"
             animate={inputFocus.texto ? 'focus' : 'rest'}
             transition={{ type: 'spring', stiffness: 300 }}
           />
         </motion.div>
+
         <motion.button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded"
+          className="w-full bg-indigo-600 hover:bg-indigo-500 transition text-white font-semibold py-2 rounded-lg shadow-lg disabled:opacity-50 flex items-center justify-center gap-2"
           variants={buttonVariants}
           whileHover="hover"
           whileTap="tap"
           disabled={!novaData || !novoTexto}
-          style={{
-            opacity: !novaData || !novoTexto ? 0.6 : 1,
-            cursor: !novaData || !novoTexto ? 'not-allowed' : 'pointer',
-          }}
         >
-          Adicionar
+          <Plus className="w-4 h-4" /> Adicionar Lembrete
         </motion.button>
       </motion.form>
 
-      <motion.ul className="space-y-4" variants={containerVariants}>
+      <motion.ul
+        className="space-y-4"
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+      >
         <AnimatePresence>
           {lembretes.map((item) => (
             <motion.li
@@ -165,25 +178,29 @@ const Agenda = () => {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="p-4 rounded-lg shadow-md flex justify-between items-center bg-white dark:bg-gray-800"
+              className="bg-white/10 border border-white/20 backdrop-blur-md p-4 rounded-xl flex items-center justify-between shadow hover:scale-105 transition-all"
             >
-              <div>
-                <strong className="text-blue-600 dark:text-blue-400">{item.data}</strong> — {item.texto}
+              <div className="text-sm md:text-base">
+                <span className="font-semibold text-indigo-300">{item.data}</span> —{" "}
+                <span className="text-white/90">{item.texto}</span>
               </div>
               <motion.button
                 onClick={() => apagarLembrete(item.id)}
-                className="ml-4 text-red-600 dark:text-red-400 hover:underline"
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
+                className="ml-4 text-red-400 hover:text-red-300 transition"
+                whileHover={{ scale: 1.2 }}
+                whileTap={{ scale: 0.9 }}
               >
-                Apagar
+                <Trash2 className="w-5 h-5" />
               </motion.button>
             </motion.li>
           ))}
         </AnimatePresence>
       </motion.ul>
     </motion.div>
-  )
+  </motion.div>
+);
+
+
 }
 
 export default Agenda

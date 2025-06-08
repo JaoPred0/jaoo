@@ -46,34 +46,35 @@ const Tarefas = () => {
   }, []);
 
   return (
-    <div className="p-4 min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors">
-      <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+    <div className="p-6 min-h-screen transition-colors">
+      <h2 className="text-2xl font-bold mb-6 flex items-center gap-3">
         <FaFolderOpen /> Pastas de Tarefas
       </h2>
 
-      <div className="flex gap-2 mb-6">
+      <div className="flex gap-3 mb-8">
         <input
-          className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 px-3 py-2 rounded w-full"
+          className="flex-grow bg-opacity-30 backdrop-blur-sm border placeholder-gray-600 dark:placeholder-gray-400 px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
           placeholder="Nome da pasta"
           value={novoCard}
           onChange={(e) => setNovoCard(e.target.value)}
         />
         <button
           onClick={criarCard}
-          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded flex items-center gap-2"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold flex items-center gap-2 transition-transform active:scale-95"
+          title="Criar nova pasta"
         >
           <FaFolderPlus />
           Criar
         </button>
       </div>
 
-      <div className="grid gap-3 grid-cols-2 md:grid-cols-4">
+      <div className="grid gap-5 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
         {cards.map((card, i) => (
           <Card
             key={card.id}
             id={card.id}
             titulo={card.titulo}
-            delay={i * 0.05}
+            delay={i * 0.08}
             abrirModal={abrirModal}
           />
         ))}
@@ -81,28 +82,41 @@ const Tarefas = () => {
 
       {/* Modal de confirmação */}
       {modalAberto && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded shadow-lg max-w-sm w-full text-center">
-            <h3 className="text-lg font-bold mb-4 text-gray-900 dark:text-gray-100">Confirmar exclusão</h3>
-            <p className="mb-6 text-gray-700 dark:text-gray-300">
+        <motion.div
+          className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+        >
+          <motion.div
+            className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg max-w-sm w-full text-center"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.8, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <h3 className="text-lg font-bold mb-5 text-gray-900 dark:text-gray-100">
+              Confirmar exclusão
+            </h3>
+            <p className="mb-8 text-gray-700 dark:text-gray-300">
               Tem certeza que deseja apagar esta pasta? Essa ação não pode ser desfeita.
             </p>
-            <div className="flex justify-center gap-4">
+            <div className="flex justify-center gap-6">
               <button
                 onClick={fecharModal}
-                className="px-4 py-2 rounded border border-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700"
+                className="px-5 py-2 rounded-lg border border-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 transition"
               >
                 Cancelar
               </button>
               <button
                 onClick={deletarCard}
-                className="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700"
+                className="px-5 py-2 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold transition"
               >
                 Apagar
               </button>
             </div>
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       )}
     </div>
   );
@@ -120,7 +134,7 @@ const Card = ({ id, titulo, delay, abrirModal }) => {
 
   return (
     <motion.div
-      className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow hover:shadow-md cursor-pointer transition-colors border dark:border-gray-700 relative"
+      className=" p-4 rounded-lg shadow hover:shadow-md cursor-pointer transition-colors border dark:border-gray-700 relative"
       whileHover={{ scale: 1.03 }}
       whileTap={{ scale: 0.97 }}
       initial={{ opacity: 0, y: 10 }}
@@ -142,3 +156,4 @@ const Card = ({ id, titulo, delay, abrirModal }) => {
 };
 
 export default Tarefas;
+

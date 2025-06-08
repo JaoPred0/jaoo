@@ -30,41 +30,47 @@ const tooltipVariants = {
 
 const Projetos = () => {
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 p-6 flex flex-col items-center">
+    <div className="min-h-screen text-gray-200 p-6 flex flex-col items-center">
       <h1 className="text-3xl font-bold mb-8">Meus Projetos no GitHub</h1>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 max-w-6xl w-full">
         {projetos.map((projeto, i) => (
           <motion.div
             key={projeto.id}
-            className="bg-gray-800 rounded-lg shadow-lg overflow-hidden flex flex-col"
+            className="backdrop-blur-md rounded-2xl shadow-2xl overflow-hidden flex flex-col border border-white/10 transition duration-300"
             custom={i}
             initial="hidden"
             animate="visible"
             variants={cardVariants}
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.03 }}
           >
             <img
               src={projeto.imagem}
               alt={`Capa do projeto ${projeto.nome}`}
               className="w-full h-44 object-cover"
             />
-            <div className="p-4 flex flex-col flex-grow">
-              <h2 className="text-xl font-semibold mb-2">{projeto.nome}</h2>
-              <p className="text-gray-400 flex-grow">{projeto.descricao}</p>
+
+            <div className="p-4 flex flex-col flex-grow text-white">
+              <h2 className="text-xl font-bold mb-2 drop-shadow-sm">{projeto.nome}</h2>
+              <p className="text-gray-300 flex-grow text-sm leading-relaxed">{projeto.descricao}</p>
 
               <motion.a
                 href={projeto.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-4 inline-block bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-semibold px-4 py-2 rounded relative group"
+                className="mt-4 relative inline-flex items-center justify-center px-5 py-2 font-semibold text-gray-900 bg-yellow-400 hover:bg-yellow-500 rounded-md overflow-hidden group transition-all duration-300"
                 aria-label={`Acessar o projeto ${projeto.nome} no GitHub`}
                 initial="rest"
                 whileHover="hover"
                 animate="rest"
               >
-                Acessar
+                <span className="relative z-10">Acessar</span>
+
+                {/* efeito de brilho */}
+                <span className="absolute inset-0 bg-yellow-500 opacity-0 group-hover:opacity-20 transition-all duration-300 rounded-md blur-sm" />
+
+                {/* tooltip flutuante */}
                 <motion.span
-                  className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-700 text-sm rounded px-2 py-1 whitespace-nowrap pointer-events-none z-10"
+                  className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300"
                   variants={tooltipVariants}
                   initial="hidden"
                   animate="hidden"
@@ -75,6 +81,7 @@ const Projetos = () => {
               </motion.a>
             </div>
           </motion.div>
+
         ))}
       </div>
     </div>

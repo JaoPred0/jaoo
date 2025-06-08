@@ -33,42 +33,70 @@ export const Horario = () => {
     const horarioNoturno = []; // Não há dados para o noturno no PDF
 
     const renderTabela = (titulo, dados) => (
-        <section className="mb-10">
-            <h2 className="text-2xl font-bold mb-4">{titulo}</h2>
-            <div className="overflow-x-auto">
-                <table className="w-full min-w-[900px] border border-gray-700 text-sm text-white">
-                    <thead>
-                        <tr className="bg-gray-800">
-                            {diasSemana.map((dia, idx) => (
-                                <th key={idx} className="py-2 px-4 border border-gray-700 font-semibold">
-                                    {dia}
-                                </th>
-                            ))}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {dados.map((linha, i) => (
-                            <tr key={i} className="hover:bg-gray-800">
-                                {linha.map((celula, j) => (
-                                    <td key={j} className="py-2 px-4 border border-gray-700">
-                                        {celula || '-'}
-                                    </td>
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            </div>
-        </section>
-    );
+  <section className="mb-12">
+    <h2 className="text-3xl font-extrabold mb-5 text-gray-100 drop-shadow-md border-b border-gray-600 pb-3">
+      {titulo}
+    </h2>
+    <div
+      className="overflow-x-auto rounded-lg border border-gray-700"
+      style={{
+        background: 'transparent',          // fundo transparente
+        backdropFilter: 'blur(12px)',       // blur aplicado
+        WebkitBackdropFilter: 'blur(12px)',
+        boxShadow: '0 8px 24px rgba(0, 0, 0, 0.4)',  // sombra suave pra destacar
+      }}
+    >
+      <table className="w-full min-w-[900px] text-gray-200 text-sm border-collapse">
+        <thead className="sticky top-0 bg-gray-900/60 border-b border-gray-700 shadow-md">
+          <tr>
+            {diasSemana.map((dia, idx) => (
+              <th
+                key={idx}
+                className={`py-3 px-5 border-r border-gray-700 font-semibold select-none whitespace-nowrap ${
+                  idx === 0 ? 'sticky left-0 bg-gray-900 z-20' : ''
+                }`}
+                style={{ minWidth: idx === 0 ? 140 : 120 }}
+              >
+                {dia}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {dados.map((linha, i) => (
+            <tr
+              key={i}
+              className={`${
+                i % 2 === 0 ? 'bg-gray-900/40' : 'bg-gray-800/30'
+              } hover:bg-gray-700/60 transition-colors duration-300 cursor-default`}
+            >
+              {linha.map((celula, j) => (
+                <td
+                  key={j}
+                  className={`py-3 px-5 border border-gray-700 whitespace-nowrap ${
+                    j === 0 ? 'font-mono font-semibold bg-gray-900/50 sticky left-0 z-10' : ''
+                  }`}
+                  style={{ minWidth: j === 0 ? 140 : 120 }}
+                >
+                  {celula || '-'}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </section>
+);
 
-    return (
-        <div className="p-6 bg-gray-900 min-h-screen">
-            {renderTabela('Horário Matutino', horarioMatutino)}
-            {renderTabela('Horário Vespertino', horarioVespertino)}
-            {renderTabela('Horário Noturno', horarioNoturno)}
-        </div>
-    );
+return (
+  <div className="p-6 bg-gray-900 min-h-screen font-sans">
+    {renderTabela('Horário Matutino', horarioMatutino)}
+    {renderTabela('Horário Vespertino', horarioVespertino)}
+    {renderTabela('Horário Noturno', horarioNoturno)}
+  </div>
+);
+
 };
 
 export const Lembretes = () => {

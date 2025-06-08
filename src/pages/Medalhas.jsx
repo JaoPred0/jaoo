@@ -116,121 +116,122 @@ const Medalhas = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col items-center p-4">
-      {/* Filtros */}
-      <div className="flex gap-4 mb-6">
-        {["consegui", "naoConsegui", "todas"].map((tipo) => (
-          <button
-            key={tipo}
-            onClick={() => setFiltro(tipo)}
-            className={`px-4 py-2 rounded ${
-              filtro === tipo
-                ? "bg-yellow-500 text-gray-900"
-                : "bg-gray-700 hover:bg-gray-600"
-            }`}
-          >
-            {tipo === "consegui"
-              ? "Consegui"
-              : tipo === "naoConsegui"
-              ? "Não consegui"
-              : "Todas"}
-          </button>
-        ))}
-      </div>
+  <div className="min-h-screen bg-gradient-to-br text-gray-200 flex flex-col items-center p-4 backdrop-blur-md">
+    {/* Filtros */}
+    <div className="flex gap-4 mb-6">
+      {["consegui", "naoConsegui", "todas"].map((tipo) => (
+        <button
+          key={tipo}
+          onClick={() => setFiltro(tipo)}
+          className={`px-4 py-2 rounded-xl backdrop-blur border transition-all duration-200 shadow-md font-semibold ${
+            filtro === tipo
+              ? "bg-yellow-500 text-gray-900 border-yellow-400"
+              : "bg-white/10 border-white/20 hover:bg-white/20"
+          }`}
+        >
+          {tipo === "consegui"
+            ? "Consegui"
+            : tipo === "naoConsegui"
+            ? "Não consegui"
+            : "Todas"}
+        </button>
+      ))}
+    </div>
 
-      {/* Lista de Medalhas */}
-      <motion.div
-        className="flex flex-wrap gap-6 justify-center items-center mt-8 max-w-xl w-full"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        key={filtro} // para animar ao trocar filtro
-      >
-        <AnimatePresence>
-          {filtrarMedalhas().map((medalha) =>
-            medalha.desbloqueada ? (
-              <motion.button
-                key={medalha.id}
-                onClick={() => abrirModal(medalha)}
-                className="relative flex flex-col items-center cursor-pointer focus:outline-none w-24"
-                aria-label={`Medalha ${medalha.nome}`}
-                variants={medalhaVariants}
-                initial="hidden"
-                animate="visible"
-                exit={{ opacity: 0, scale: 0.7, transition: { duration: 0.2 } }}
-                whileHover="hover"
-                whileTap="tap"
-                layout
-              >
-                <div
-                  className={`w-24 h-24 rounded-full ${medalha.corBg} border-4 ${medalha.corBorder} shadow-lg flex items-center justify-center text-4xl font-bold select-none ${medalha.textoCor}`}
-                >
-                  {medalha.emoji}
-                </div>
-                <span
-                  className={`mt-2 font-semibold text-center ${medalha.corBorder.replace(
-                    "border-",
-                    "text-"
-                  )}`}
-                >
-                  {medalha.nome}
-                </span>
-              </motion.button>
-            ) : (
-              <motion.div
-                key={medalha.id}
-                className="w-20 h-20 rounded-full bg-gray-700 border-2 border-gray-600 flex items-center justify-center text-3xl text-gray-400 select-none"
-                title="Medalha trancada"
-                variants={medalhaVariants}
-                initial="hidden"
-                animate="visible"
-                exit={{ opacity: 0, scale: 0.7, transition: { duration: 0.2 } }}
-                layout
+    {/* Lista de Medalhas */}
+    <motion.div
+      className="flex flex-wrap gap-6 justify-center items-center mt-8 max-w-xl w-full"
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      key={filtro}
+    >
+      <AnimatePresence>
+        {filtrarMedalhas().map((medalha) =>
+          medalha.desbloqueada ? (
+            <motion.button
+              key={medalha.id}
+              onClick={() => abrirModal(medalha)}
+              className="relative flex flex-col items-center cursor-pointer focus:outline-none w-24"
+              aria-label={`Medalha ${medalha.nome}`}
+              variants={medalhaVariants}
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0, scale: 0.7, transition: { duration: 0.2 } }}
+              whileHover="hover"
+              whileTap="tap"
+              layout
+            >
+              <div
+                className={`w-24 h-24 rounded-full ${medalha.corBg} border-4 ${medalha.corBorder} shadow-xl flex items-center justify-center text-4xl font-bold select-none ${medalha.textoCor} backdrop-blur-lg bg-white/10`}
               >
                 {medalha.emoji}
-              </motion.div>
-            )
-          )}
-        </AnimatePresence>
-      </motion.div>
+              </div>
+              <span
+                className={`mt-2 font-semibold text-center ${medalha.corBorder.replace(
+                  "border-",
+                  "text-"
+                )}`}
+              >
+                {medalha.nome}
+              </span>
+            </motion.button>
+          ) : (
+            <motion.div
+              key={medalha.id}
+              className="w-20 h-20 rounded-full bg-white/10 border-2 border-white/30 flex items-center justify-center text-3xl text-white/40 select-none shadow backdrop-blur-md"
+              title="Medalha trancada"
+              variants={medalhaVariants}
+              initial="hidden"
+              animate="visible"
+              exit={{ opacity: 0, scale: 0.7, transition: { duration: 0.2 } }}
+              layout
+            >
+              {medalha.emoji}
+            </motion.div>
+          )
+        )}
+      </AnimatePresence>
+    </motion.div>
 
-      {/* Modal */}
-      <AnimatePresence>
-        {modalAberto && medalhaSelecionada && (
+    {/* Modal */}
+    <AnimatePresence>
+      {modalAberto && medalhaSelecionada && (
+        <motion.div
+          className="fixed inset-0 backdrop-blur-sm flex justify-center items-center z-50 p-4"
+          variants={modalBackdropVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          onClick={fecharModal}
+        >
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-70 flex justify-center items-center z-50 p-4"
-            variants={modalBackdropVariants}
+            className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 max-w-md w-full text-white border border-white/20 shadow-xl"
+            variants={modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit"
-            onClick={fecharModal}
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              className="bg-gray-800 rounded-lg p-6 max-w-md w-full text-gray-200 relative"
-              variants={modalVariants}
-              initial="hidden"
-              animate="visible"
-              exit="exit"
-              onClick={(e) => e.stopPropagation()}
+            <h2 className="text-2xl font-bold mb-4 text-yellow-300">
+              Medalha: {medalhaSelecionada.nome}
+            </h2>
+            <p className="mb-4 leading-relaxed text-white/80">
+              {medalhaSelecionada.descricao}
+            </p>
+            <button
+              onClick={fecharModal}
+              className="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded text-gray-900 font-semibold transition"
             >
-              <h2 className="text-2xl font-bold mb-4">
-                Medalha: {medalhaSelecionada.nome}
-              </h2>
-              <p className="mb-4 leading-relaxed">
-                {medalhaSelecionada.descricao}
-              </p>
-              <button
-                onClick={fecharModal}
-                className="mt-2 px-4 py-2 bg-yellow-500 hover:bg-yellow-600 rounded text-gray-900 font-semibold transition"
-              >
-                Fechar
-              </button>
-            </motion.div>
+              Fechar
+            </button>
           </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
+        </motion.div>
+      )}
+    </AnimatePresence>
+  </div>
+);
+
 };
 
 export default Medalhas;

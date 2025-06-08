@@ -25,31 +25,36 @@ export default function Perfil() {
   return (
     <>
       <motion.div
-        className="max-w-md mx-auto mt-10 p-6 bg-gray-800 rounded-lg shadow-lg text-white"
+        className="max-w-md mx-auto mt-12 p-8 rounded-3xl border border-white/20 backdrop-blur-xl  text-white shadow-lg"
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: 'easeOut' }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
       >
-        <h1 className="text-3xl font-semibold mb-4">Perfil do Usuário</h1>
-        <div className="flex items-center space-x-4">
+        <h1 className="text-4xl font-extrabold mb-8 text-center tracking-wide drop-shadow-md">
+          Perfil do Usuário
+        </h1>
+
+        <div className="flex items-center space-x-6">
           <motion.img
             src="./perfil.png"
             alt="Foto do usuário"
-            className="w-24 h-24 rounded-full border-4 border-gray-600"
-            initial={{ scale: 0.8 }}
+            className="w-28 h-28 rounded-full border-4 border-white/30 shadow-xl"
+            initial={{ scale: 0.85 }}
             animate={{ scale: 1 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           />
-          <div>
-            <h2 className="text-xl font-semibold">{nome}</h2>
-            <p className="text-gray-400">{descricao}</p>
+          <div className="flex flex-col space-y-1">
+            <h2 className="text-2xl font-semibold drop-shadow-lg">{nome}</h2>
+            <p className="text-gray-300 italic text-sm max-w-xs leading-relaxed drop-shadow-sm">
+              {descricao}
+            </p>
           </div>
         </div>
 
         <motion.button
-          whileHover={{ scale: 1.05 }}
+          whileHover={{ scale: 1.07, boxShadow: "0 0 15px 2px rgba(99, 102, 241, 0.8)" }}
           whileTap={{ scale: 0.95 }}
-          className="mt-6 bg-indigo-600 hover:bg-indigo-700 px-5 py-2 rounded-md shadow-md font-semibold"
+          className="mt-10 w-full py-3 rounded-xl bg-indigo-500/80 hover:bg-indigo-600/90 font-semibold tracking-wide shadow-md transition-all duration-300 drop-shadow-md"
           onClick={() => setModalOpen(true)}
         >
           Editar Perfil
@@ -59,49 +64,51 @@ export default function Perfil() {
       <AnimatePresence>
         {modalOpen && (
           <motion.div
-            className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+            className="fixed inset-0 bg-transparent backdrop-blur-3xl flex items-center justify-center z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <motion.div
-              className="bg-gray-900 rounded-lg p-6 w-11/12 max-w-md text-white shadow-lg"
-              initial={{ scale: 0.8, opacity: 0 }}
+              className="backdrop-blur-2xl border border-white/30 rounded-3xl p-8 w-11/12 max-w-md shadow-2xl text-white"
+              initial={{ scale: 0.85, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ duration: 0.3 }}
+              exit={{ scale: 0.85, opacity: 0 }}
+              transition={{ duration: 0.35 }}
             >
-              <h2 className="text-2xl mb-4 font-semibold">Editar Perfil</h2>
+              <h2 className="text-3xl mb-6 font-extrabold text-center drop-shadow-lg">
+                Editar Perfil
+              </h2>
 
-              <label className="block mb-2">
-                Nome:
+              <label className="block mb-5">
+                <span className="text-sm text-gray-300">Nome:</span>
                 <input
                   type="text"
                   value={nome}
                   onChange={(e) => setNome(e.target.value)}
-                  className="w-full mt-1 p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  className="w-full mt-2 p-3 rounded-xl bg-gray-800/60 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 backdrop-blur-sm"
                 />
               </label>
 
-              <label className="block mb-4">
-                Descrição:
+              <label className="block mb-8">
+                <span className="text-sm text-gray-300">Descrição:</span>
                 <textarea
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
-                  rows={3}
-                  className="w-full mt-1 p-2 rounded bg-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-none"
+                  rows={4}
+                  className="w-full mt-2 p-3 rounded-xl bg-gray-800/60 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none backdrop-blur-sm"
                 />
               </label>
 
-              <div className="flex justify-end space-x-3">
+              <div className="flex justify-end space-x-4">
                 <button
-                  className="px-4 py-2 bg-gray-700 rounded hover:bg-gray-600"
+                  className="px-5 py-2 rounded-xl bg-gray-700/70 hover:bg-gray-700 transition font-semibold"
                   onClick={() => setModalOpen(false)}
                 >
                   Cancelar
                 </button>
                 <button
-                  className="px-4 py-2 bg-indigo-600 rounded hover:bg-indigo-700"
+                  className="px-5 py-2 rounded-xl bg-indigo-500/90 hover:bg-indigo-600 transition font-semibold"
                   onClick={salvarPerfil}
                 >
                   Salvar
@@ -113,4 +120,6 @@ export default function Perfil() {
       </AnimatePresence>
     </>
   );
+
+
 }

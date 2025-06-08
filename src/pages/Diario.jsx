@@ -94,33 +94,74 @@ const Diario = () => {
   const dadosLinha = gerarHistoricoLinha();
 
   return (
-    <div className="max-w-4xl mx-auto p-4 font-sans text-gray-800 dark:text-gray-100 dark:bg-gray-900 min-h-screen">
+  <div className="min-h-screen flex items-center justify-center p-4">
 
-      <motion.h2 className="text-2xl md:text-3xl font-bold mb-6 text-center">
+    <motion.div
+      className="w-full max-w-5xl mx-auto p-6 rounded-2xl shadow-2xl border border-white/20
+                  backdrop-blur-lg transition-all"
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ duration: 0.7 }}
+    >
+      <motion.h2
+        className="text-2xl md:text-3xl font-bold mb-8 text-center text-white drop-shadow"
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+      >
         📅 Rotina Diária - {dataAtual}
       </motion.h2>
 
       <ul className="space-y-4 mb-10">
         {tarefas.map((item, index) => (
-          <li key={index} className="flex items-center space-x-4">
-            <input
-              type="checkbox"
-              checked={!!concluidasHoje[index]}
-              onChange={() => toggleTarefa(index)}
-              className="w-5 h-5 text-green-600 rounded focus:ring-green-500"
-              id={`tarefa-${index}`}
-            />
-            <label htmlFor={`tarefa-${index}`} className="cursor-pointer select-none">
-              <span className="font-semibold">{item.hora} - </span>
-              {item.atividade}
+          <motion.li
+            key={index}
+            className="flex items-center space-x-4 text-white/90 px-4 py-3 rounded-xl 
+                       backdrop-blur-md hover:scale-[1.015] transition-all duration-300 shadow-md border border-white/20"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.4, delay: index * 0.1 }}
+          >
+            <label htmlFor={`tarefa-${index}`} className="flex items-center space-x-4 w-full cursor-pointer select-none">
+              <div className="relative">
+                <input
+                  type="checkbox"
+                  id={`tarefa-${index}`}
+                  checked={!!concluidasHoje[index]}
+                  onChange={() => toggleTarefa(index)}
+                  className="peer hidden"
+                />
+                <div className="w-6 h-6 rounded-md bg-white/20 border border-white/40
+                                peer-checked:bg-green-500 peer-checked:border-green-600
+                                transition-all duration-300 flex items-center justify-center shadow-inner">
+                  <svg
+                    className="w-4 h-4 text-white opacity-0 peer-checked:opacity-100 transition-opacity duration-200"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="3"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </div>
+              <div className="flex-1">
+                <span className="font-semibold text-white/90">{item.hora} - </span>
+                <span className="text-white/80">{item.atividade}</span>
+              </div>
             </label>
-          </li>
+          </motion.li>
         ))}
       </ul>
 
-      <div className="flex flex-col md:flex-row gap-6 justify-center items-center">
-        {/* Envolver cada gráfico em uma div para controlar largura */}
-        <div className="w-full max-w-xs md:max-w-sm">
+      <div className="flex flex-col md:flex-row gap-8 justify-center items-center">
+        {/* Gráfico Pizza */}
+        <motion.div
+          className="w-full max-w-xs md:max-w-sm bg-white/10 rounded-xl p-4 shadow-md backdrop-blur"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+        >
           <ResponsiveContainer width="100%" height={300}>
             <PieChart>
               <Pie
@@ -141,9 +182,15 @@ const Diario = () => {
               <Legend verticalAlign="bottom" height={36} />
             </PieChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
 
-        <div className="w-full max-w-full md:max-w-2xl">
+        {/* Gráfico Linha */}
+        <motion.div
+          className="w-full max-w-full md:max-w-2xl bg-white/10 rounded-xl p-4 shadow-md backdrop-blur"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.5 }}
+        >
           <ResponsiveContainer width="100%" height={300}>
             <LineChart data={dadosLinha} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
               <CartesianGrid strokeDasharray="3 3" />
@@ -160,11 +207,11 @@ const Diario = () => {
               />
             </LineChart>
           </ResponsiveContainer>
-        </div>
+        </motion.div>
       </div>
-
-    </div>
-  );
+    </motion.div>
+  </div>
+);
 
 };
 
