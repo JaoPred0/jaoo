@@ -35,13 +35,22 @@ const JaoX = () => {
   }
 
   const tempoDesde = (data) => {
-    const segundos = Math.floor((new Date() - new Date(data.seconds * 1000)) / 1000)
-    if (segundos < 60) return 'agora'
-    const minutos = Math.floor(segundos / 60)
-    if (minutos < 60) return `${minutos} min`
-    const horas = Math.floor(minutos / 60)
-    return `${horas}h`
-  }
+  const agora = new Date()
+  const postDate = new Date(data.seconds * 1000)
+  const segundos = Math.floor((agora - postDate) / 1000)
+
+  if (segundos < 60) return 'agora'
+  const minutos = Math.floor(segundos / 60)
+  if (minutos < 60) return `${minutos} min`
+  const horas = Math.floor(minutos / 60)
+  if (horas < 24) return `${horas}h`
+  const dias = Math.floor(horas / 24)
+  if (dias <= 7) return `${dias} dia${dias > 1 ? 's' : ''} atrás`
+
+  // Se for mais de 7 dias, mostra a data completa
+  return postDate.toLocaleDateString('pt-BR')
+}
+
 
   return (
     <div className=" min-h-screen text-white mx-auto relative">
